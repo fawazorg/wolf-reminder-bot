@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${ROOT_DATABASE}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PWD: ${MONGO_PWD}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
+    ports:
+      - "27023:27017"
+    volumes:
+      - mongodata:/data/db
+      - ./mongo_init/mongo-entrypoint.js:/docker-entrypoint-initdb.d/mongo-entrypoint.js:ro
+volumes:
+  mongodata:
