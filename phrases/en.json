@@ -1,6 +1,24 @@
 [
   {
     "name": "main_command",
-    "value": "!reminder"
+    "value": "!adhan"
+  },
+  {
+    "name": "place_command",
+    "value": "place"
+  },
+  {
+    "name": "pray_time_title",
+    "value": "/me Prayer times according to local time in {city} :\n{list}"
+  },
+  {
+    "name": "pray_time",
+    "value": {
+      "fajr": "Fajr",
+      "dhuhr": "Dhuhr",
+      "asr": "Asr",
+      "maghrib": "Maghrib",
+      "isha": "Isha"
+    }
   }
 ]

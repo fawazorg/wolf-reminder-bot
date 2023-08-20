@@ -1,6 +1,36 @@
 [
   {
     "name": "main_command",
-    "value": "!تذكير"
+    "value": "!اذان"
+  },
+  {
+    "name": "place_command",
+    "value": "مكان"
+  },
+  {
+    "name": "pray_time_title",
+    "value": "/me أوقات الصلاة حسب التوقيت المحلي في {city} :\n{list}"
+  },
+  {
+    "name": "pray_time_now",
+    "value": "/me - حان الآن وقت صلاة {pray} حسب التوقيت المحلي لمدينة {city} {time}"
+  },
+  {
+    "name": "pray_place_success",
+    "value": "/me (y) تم تغيير المكان الى \"{city}\""
+  },
+  {
+    "name": "pray_place_failed",
+    "value": "/me (n) لم يتم العثور على \"{city}\""
+  },
+  {
+    "name": "pray_time",
+    "value": {
+      "fajr": "الفجر",
+      "dhuhr": "الظهر",
+      "asr": "العصر",
+      "maghrib": "المغرب",
+      "isha": "العشاء"
+    }
   }
 ]
