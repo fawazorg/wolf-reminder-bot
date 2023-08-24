@@ -1,13 +1,14 @@
 import { Schema, model } from 'mongoose';
 
 const ChannelSchema = new Schema({
-  method: { type: String },
+  notify: { type: Boolean, default: true },
+  method: { type: String, default: 'UmmAlQura' },
   cid: { unique: true, type: Number, require: true },
   city: {
-    lat: { type: Number },
-    long: { type: Number },
-    name: { type: String },
-    timeZone: { type: String },
+    lat: { type: Number, default: 21.42251 },
+    long: { type: Number, default: 39.826168 },
+    name: { type: String, default: 'مكة المكرمة' },
+    timeZone: { type: String, default: 'Asia/Riyadh' },
   },
 });
 

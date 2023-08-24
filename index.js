@@ -13,11 +13,19 @@ client.commandHandler.register([
   // main command
   new Command(
     'main_command',
-    { both: (command) => Adhan.Main(client, command) },
+    { channel: (command) => Adhan.Main(client, command) },
     [
       // place command
       new Command('place_command', {
-        both: (command) => Adhan.Place(client, command),
+        channel: (command) => Adhan.Place(client, command),
+      }),
+      // help command
+      new Command('help_command', {
+        channel: (command) => Adhan.Help(command),
+      }),
+      // remind command
+      new Command('remind_command', {
+        channel: (command) => Adhan.Remind(command),
       }),
     ],
   ),

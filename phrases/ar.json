@@ -8,8 +8,26 @@
     "value": "مكان"
   },
   {
+    "name": "help_command",
+    "value": "مساعدة"
+  },
+  {
+    "name": "remind_command",
+    "value": "تذكير"
+  },
+  {
     "name": "pray_time_title",
     "value": "/me أوقات الصلاة حسب التوقيت المحلي في {city} :\n{list}"
+  },
+  {
+    "name": "help_message",
+    "value": [
+      "مرحبا بك في بوت الأذان:\n",
+      "!اذان - لعرض مواقيت الصلاة",
+      "!اذان مكان <المكان> - لتغيير مكان الصلاة",
+      "!اذان تذكير - لتفعيل / تعطيل تنبيه الأذان",
+      "!اذان مساعدة - لعرض قائمة المساعدة"
+    ]
   },
   {
     "name": "pray_time_now",
@@ -18,6 +36,14 @@
   {
     "name": "pray_place_success",
     "value": "/me (y) تم تغيير المكان الى \"{city}\""
+  },
+  {
+    "name": "remind_enabled",
+    "value": "/me (y) تم تفعيل تنبيه الأذان"
+  },
+  {
+    "name": "remind_disabled",
+    "value": "/me (y) تم تعطيل تنبيه الأذان"
   },
   {
     "name": "pray_place_failed",

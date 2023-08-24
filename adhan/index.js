@@ -4,6 +4,7 @@ import search from '../utility/geocode.js';
 import logger from '../utility/logger.js';
 
 export const defaultCity = {
+  notify: true,
   method: 'UmmAlQura',
   city: {
     lat: 21.42251,
@@ -85,4 +86,26 @@ const changePlace = async (client, command) => {
     logger.error(e);
   }
 };
-export { getAllPrayTimes, changePlace };
+/**
+ *
+ * @param {import('wolf.js').CommandContext} command
+ * @returns {Promise<void>}
+ */
+const toggleRemind = async (command) => {
+  try {
+    const channel = await Channel.findOneAndUpdate(
+      { cid: command.targetChannelId },
+      [{ $set: { notify: { $not: '$notify' } } }],
+      { upsert: true },
+    );
+    if (channel?.notify) {
+      await command.reply(command.getPhrase('remind_enabled'));
+    } else {
+      await command.reply(command.getPhrase('remind_disabled'));
+    }
+  } catch (e) {
+    logger.error(e);
+  }
+};
+
+export { getAllPrayTimes, changePlace, toggleRemind };

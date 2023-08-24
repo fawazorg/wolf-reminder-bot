@@ -12,9 +12,18 @@ const isNow = (time) => {
     Math.round(moment.duration(moment(time).diff(moment())).asMinutes()) === 1
   );
 };
-
+/**
+ *
+ * @param {import('wolf.js').WOLF} client
+ * @param channel
+ * @returns {Promise<Awaited<boolean>>}
+ */
+// eslint-disable-next-line consistent-return
 const sendAlert = async (client, channel) => {
   try {
+    if (!channel.notify) {
+      return Promise.resolve(false);
+    }
     const prayTime = PrayTimes(
       channel.city.lat,
       channel.city.long,
@@ -25,17 +34,20 @@ const sendAlert = async (client, channel) => {
       language,
       'pray_time',
     );
-    if (prayTime.nextPrayer() === 'none') {
-      return Promise.resolve();
+    if (
+      prayTime.nextPrayer() === 'none' &&
+      prayTime.nextPrayer() === 'sunrise'
+    ) {
+      return Promise.resolve(false);
     }
     if (!isNow(prayTime[prayTime.nextPrayer()])) {
-      return Promise.resolve();
+      return Promise.resolve(false);
     }
     const phrase = client.phrase.getByLanguageAndName(
       language,
       'pray_time_now',
     );
-    return client.messaging.sendChannelMessage(
+    await client.messaging.sendChannelMessage(
       channel.id,
       client.utility.string.replace(phrase, {
         city: channel.city.name,
@@ -47,6 +59,7 @@ const sendAlert = async (client, channel) => {
         ),
       }),
     );
+    return Promise.resolve(true);
   } catch (e) {
     logger.error(e);
   }
