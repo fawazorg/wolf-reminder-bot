@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'dotenv/config.js';
 import logger from './logger.js';
 
-const search = async (q, lang = 'ar') => {
+const search = async (q = '', lang = 'ar') => {
   try {
     const { data } = await axios.get(
       'https://geocode.search.hereapi.com/v1/geocode',

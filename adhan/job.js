@@ -35,7 +35,7 @@ const sendAlert = async (client, channel) => {
       'pray_time',
     );
     if (
-      prayTime.nextPrayer() === 'none' &&
+      prayTime.nextPrayer() === 'none' ||
       prayTime.nextPrayer() === 'sunrise'
     ) {
       return Promise.resolve(false);
