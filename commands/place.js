@@ -1,3 +1,4 @@
+import { Capability } from 'wolf.js';
 import { changePlace } from '../adhan/index.js';
 
 /**
@@ -7,5 +8,9 @@ import { changePlace } from '../adhan/index.js';
  * @returns {Promise<void>}
  */
 export default async (client, command) => {
-  await changePlace(client, command);
+  const isOwner = await command.hasCapability(Capability.OWNER, true, false);
+  if (!isOwner) {
+    return command.reply(command.getPhrase('error_command_not_authorized'));
+  }
+  return changePlace(client, command);
 };

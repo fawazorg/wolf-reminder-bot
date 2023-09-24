@@ -7,5 +7,8 @@ import { getAllPrayTimes } from '../adhan/index.js';
  * @returns {Promise<void>}
  */
 export default async (client, command) => {
-  await getAllPrayTimes(client, command);
+  if (!command.isChannel) {
+    return Promise.resolve();
+  }
+  return getAllPrayTimes(client, command);
 };

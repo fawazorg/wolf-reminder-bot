@@ -1,10 +1,14 @@
 import axios from 'axios';
 
 import 'dotenv/config.js';
+import { Validator } from 'wolf.js';
 import logger from './logger.js';
 
 const search = async (q = '', lang = 'ar') => {
   try {
+    if (Validator.isNullOrWhitespace(q)) {
+      return false;
+    }
     const { data } = await axios.get(
       'https://geocode.search.hereapi.com/v1/geocode',
       {

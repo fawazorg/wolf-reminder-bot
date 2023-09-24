@@ -13,7 +13,7 @@ client.commandHandler.register([
   // main command
   new Command(
     'main_command',
-    { channel: (command) => Adhan.Main(client, command) },
+    { both: (command) => Adhan.Main(client, command) },
     [
       // place command
       new Command('place_command', {
@@ -27,6 +27,10 @@ client.commandHandler.register([
       new Command('remind_command', {
         channel: (command) => Adhan.Remind(command),
       }),
+      // Join command
+      new Command('join_command', {
+        private: (command) => Adhan.Join(client, command),
+      }),
     ],
   ),
 ]);
@@ -35,7 +39,9 @@ client.on('loginSuccess', async (subscriber) => {
   logger.info(`Login success: ${subscriber.id}`);
   scheduleJob('* * * * *', async () => job(client));
 });
-
+client.on('rateLimit', (data) => {
+  logger.error(`Rate limit ${data.queue} until ${data.until}`);
+});
 client.on('loginFailed', (res) => {
   logger.error(`Login failed. Reason: ${res?.headers?.message}`);
 });

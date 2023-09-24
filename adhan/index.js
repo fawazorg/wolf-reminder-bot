@@ -84,6 +84,7 @@ const changePlace = async (client, command) => {
     );
   } catch (e) {
     logger.error(e);
+    return Promise.resolve(false);
   }
 };
 /**
