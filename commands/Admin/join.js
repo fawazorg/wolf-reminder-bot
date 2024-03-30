@@ -65,39 +65,48 @@ const botInChannel = async (channelId, clients) => {
  * @returns {Promise<boolean>}
  */
 export default async (client, command, clients) => {
+  // check admin
   const isAdmin = admins.includes(command.sourceSubscriberId);
   if (!isAdmin) {
     return Promise.resolve(false);
   }
+  // check channel id
   const IsChannelIdIsValid = await validateGroupId(client, command);
   if (!IsChannelIdIsValid) {
     return Promise.resolve(false);
   }
+  // check other bots
   const canJoin = await botInChannel(parseInt(command.argument, 10), clients);
   if (canJoin) {
     const phrase = command.getPhrase('error_can_not_join');
     await command.reply(phrase);
     return Promise.resolve(false);
   }
+  // get main
   const minClient = await minChannels(clients);
   const phrase = Array.from(command.getPhrase('join_messages'));
   const res = await minClient.channel.joinById(parseInt(command.argument, 10));
   const text = phrase.find(
     (err) => err.code === res.code && err?.subCode === res.headers?.subCode,
   );
+  await command.reply(text.msg);
+  // log to channel admin
   if (res.code === 200) {
+    const { nickname } = await client.subscriber.getById(
+      command.sourceSubscriberId,
+    );
+    const { name } = await client.channel.getById(
+      parseInt(command.argument, 10),
+    );
     const joinLogPhrase = command.getPhrase('join_log_message');
-    const joinLogText = minClient.utility.string.replace(joinLogPhrase, {
+    const joinLogText = client.utility.string.replace(joinLogPhrase, {
+      name,
+      nickname,
       channelId: command.argument,
       id: command.sourceSubscriberId,
-      nickname: (await minClient.subscriber.getById(command.sourceSubscriberId))
-        .nickname,
-      channelName: (
-        await minClient.channel.getById(parseInt(command.argument, 10))
-      ).name,
     });
     await minClient.messaging.sendChannelMessage(channelAdminId, joinLogText);
   }
-  await command.reply(text.msg);
+  // end
   return Promise.resolve(true);
 };

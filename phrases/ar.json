@@ -81,7 +81,7 @@
   },
   {
     "name": "join_log_message",
-    "value": "/me ⚙ أمر إداري\n\n•الامر:انضمام\n•المدير : {nickname} ( {id})\n•الغرفة:[{channelName}] ( {channelId})"
+    "value": "/me ⚙ أمر إداري\n\n•الامر:انضمام\n•المدير : {nickname} ( {id})\n•الغرفة:[{name}] ( {channelId})"
   },
   {
     "name": "join_messages",
