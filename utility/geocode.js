@@ -3,11 +3,15 @@ import axios from 'axios';
 import 'dotenv/config.js';
 import { Validator } from 'wolf.js';
 import logger from './logger.js';
+import cache from './cache.js';
 
 const search = async (q = '', lang = 'ar') => {
   try {
     if (Validator.isNullOrWhitespace(q)) {
-      return false;
+      throw new Error('Query empty');
+    }
+    if (cache.has(q)) {
+      return cache.get(q);
     }
     const { data } = await axios.get(
       'https://geocode.search.hereapi.com/v1/geocode',
@@ -21,6 +25,7 @@ const search = async (q = '', lang = 'ar') => {
         },
       },
     );
+    cache.set(q, data?.items[0]);
     return data?.items[0];
   } catch (_error) {
     logger.error('GeoCode request error: ', _error?.message);

@@ -1,56 +1,40 @@
-import { Command, OnlineState, WOLF } from 'wolf.js';
-import { scheduleJob } from 'node-schedule';
-import logger from './utility/logger.js';
-
 import 'dotenv/config.js';
 import './db.js';
-import * as Adhan from './commands/index.js';
-import job from './adhan/job.js';
+import { AdhanClient } from './adhanClient.js';
+import logger from './utility/logger.js';
 
-const client = new WOLF();
+const clients = new Map();
+const accounts = process.env.ACCOUNTS.split('|');
+const main = async () => {
+  await accounts.reduce(async (previousValue, account) => {
+    await previousValue;
 
-client.commandHandler.register([
-  // main command
-  new Command(
-    'main_command',
-    { both: (command) => Adhan.Main(client, command) },
-    [
-      // place command
-      new Command('place_command', {
-        channel: (command) => Adhan.Place(client, command),
-      }),
-      // help command
-      new Command('help_command', {
-        channel: (command) => Adhan.Help(command),
-      }),
-      // remind command
-      new Command('remind_command', {
-        channel: (command) => Adhan.Remind(command),
-      }),
-      // Join command
-      new Command('join_command', {
-        private: (command) => Adhan.Join(client, command),
-      }),
-    ],
-  ),
-]);
+    const client = new AdhanClient(
+      account.split(':')[0],
+      account.split(':')[1],
+    );
 
-client.on('loginSuccess', async (subscriber) => {
-  logger.info(`Login success: ${subscriber.id}`);
-  scheduleJob('* * * * *', async () => job(client));
-});
-client.on('rateLimit', (data) => {
-  logger.error(`Rate limit ${data.queue} until ${data.until}`);
-});
-client.on('loginFailed', (res) => {
-  logger.error(`Login failed. Reason: ${res?.headers?.message}`);
-});
+    clients.set(account.split(':')[0], client);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
+  }, Promise.resolve());
 
-client
-  .login(process.env.EMAIL, process.env.PASSWORD, OnlineState.ONLINE)
+  await Array.from(clients.values()).reduce(async (previousValue, client) => {
+    await previousValue;
+    client.setClients(clients);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 50);
+    });
+  }, Promise.resolve());
+
+  return Promise.resolve();
+};
+
+main()
   .then(() => {
-    logger.info('Try to login');
+    logger.info(`login to all bots ${clients.size}`);
   })
-  .catch((_error) => {
-    logger.error(_error);
+  .catch((e) => {
+    logger.info(`main function error ${e}`);
   });
