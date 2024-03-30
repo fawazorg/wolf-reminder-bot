@@ -58,6 +58,10 @@
     "value": "/me (n) لم يتم العثور على \"{city}\""
   },
   {
+    "name": "pray_place_empty",
+    "value": "/me (n) لا يمكن للمدينة ان تكون فارغة، فضلا اضف المدينة."
+  },
+  {
     "name": "pray_time",
     "value": {
       "fajr": "الفجر",

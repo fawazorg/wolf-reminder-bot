@@ -5,11 +5,14 @@ import { Validator } from 'wolf.js';
 import logger from './logger.js';
 import cache from './cache.js';
 
+/**
+ *
+ * @param {string} q
+ * @param {string} lang
+ * @returns {Promise<*|boolean>}
+ */
 const search = async (q = '', lang = 'ar') => {
   try {
-    if (Validator.isNullOrWhitespace(q)) {
-      throw new Error('Query empty');
-    }
     if (cache.has(q)) {
       return cache.get(q);
     }
