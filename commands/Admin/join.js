@@ -1,5 +1,6 @@
 import { Validator } from 'wolf.js';
 import { admins, channelAdminId } from '../../config/app.js';
+import logger from '../../utility/logger.js';
 
 /**
  * sort clients by channels count
@@ -105,7 +106,11 @@ export default async (client, command, clients) => {
       channelId: command.argument,
       id: command.sourceSubscriberId,
     });
-    await minClient.messaging.sendChannelMessage(channelAdminId, joinLogText);
+    const r = await minClient.messaging.sendChannelMessage(
+      channelAdminId,
+      joinLogText,
+    );
+    logger.info(`join to ${command.argument} with ${r.code}`);
   }
   // end
   return Promise.resolve(true);
