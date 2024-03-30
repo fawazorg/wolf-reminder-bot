@@ -4,11 +4,12 @@ import { getAllPrayTimes } from '../adhan/index.js';
  * main command handler
  * @param {import('wolf.js').WOLF} client
  * @param {import('wolf.js').CommandContext} command
- * @returns {Promise<void>}
+ * @returns {Promise<Awaited<boolean>>}
  */
 export default async (client, command) => {
   if (!command.isChannel) {
-    return Promise.resolve();
+    return Promise.resolve(false);
   }
-  return getAllPrayTimes(client, command);
+  await getAllPrayTimes(client, command);
+  return Promise.resolve(true);
 };

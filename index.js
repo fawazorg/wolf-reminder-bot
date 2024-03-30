@@ -1,6 +1,7 @@
 import 'dotenv/config.js';
 import './db.js';
 import { AdhanClient } from './adhanClient.js';
+import logger from './utility/logger.js';
 
 const clients = new Map();
 const accounts = process.env.ACCOUNTS.split('|');
@@ -19,15 +20,21 @@ const main = async () => {
     });
   }, Promise.resolve());
 
+  await Array.from(clients.values()).reduce(async (previousValue, client) => {
+    await previousValue;
+    client.setClients(clients);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 50);
+    });
+  }, Promise.resolve());
+
   return Promise.resolve();
 };
 
 main()
   .then(() => {
-    console.log(`[Connected] all ${clients.size} bots`);
+    logger.info(`login to all bots ${clients.size}`);
   })
   .catch((e) => {
-    console.log(`[Error] error ${e}`);
+    logger.info(`main function error ${e}`);
   });
-
-export default clients;

@@ -2,14 +2,23 @@ import { Command, WOLF } from 'wolf.js';
 import { scheduleJob } from 'node-schedule';
 import * as Adhan from './commands/index.js';
 import job from './adhan/job.js';
+import logger from './utility/logger.js';
 
 export class AdhanClient extends WOLF {
+  clients;
+
+  email;
+
   constructor(email, password) {
     super();
-    this.login(email, password);
-    this.on('loginSuccess', async (user) => this.#loginSuccess(user));
+    this.email = email;
+    this.login(email, password)
+      .then(() => logger.info('try to login'))
+      .catch((e) => logger.error(`login error : ${e}`));
+    this.on('loginSuccess', async () => this.#loginSuccess());
     this.on('loginFailed', (reason) => this.#loginFailed(reason));
     this.#commandHandler();
+    this.clients = null;
   }
 
   #commandHandler() {
@@ -31,9 +40,13 @@ export class AdhanClient extends WOLF {
           new Command('remind_command', {
             channel: (command) => Adhan.Remind(command),
           }),
-          // Join command
+          // join command
           new Command('join_command', {
-            private: (command) => Adhan.Join(this, command),
+            private: (command) => Adhan.Join(this, command, this.clients),
+          }),
+          // total command
+          new Command('admin_total_command', {
+            both: (command) => Adhan.Total(this, command),
           }),
         ],
       ),
@@ -41,12 +54,17 @@ export class AdhanClient extends WOLF {
   }
 
   /**
+   *
+   */
+  setClients(clients) {
+    this.clients = Array.from(clients.values());
+  }
+
+  /**
    * login handler
-   * @param {import('wolf.js').Subscriber} subscriber
    * @returns {Promise<void>}
    */
-  #loginSuccess(subscriber) {
-    console.log(subscriber.id);
+  #loginSuccess() {
     scheduleJob('* * * * *', async () => job(this));
     return Promise.resolve();
   }
@@ -56,7 +74,7 @@ export class AdhanClient extends WOLF {
    * @param {import('wolf.js').Response} reason
    */
   #loginFailed(reason) {
-    console.log(reason.body);
+    logger.error(`login failed: ${reason.headers?.message}, ${this.email}`);
     return Promise.resolve();
   }
 }

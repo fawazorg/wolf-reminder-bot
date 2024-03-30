@@ -3,6 +3,7 @@ import Channel from '../models/channel.js';
 import PrayTimes, { dateToTimeZone } from '../utility/PrayTimes.js';
 import { defaultCity } from './index.js';
 import logger from '../utility/logger.js';
+import { channelAdminId } from '../config/app.js';
 
 const castLanguage = (language) => {
   return language === 14 ? 'ar' : 'en';
@@ -21,6 +22,9 @@ const isNow = (time) => {
 // eslint-disable-next-line consistent-return
 const sendAlert = async (client, channel) => {
   try {
+    if (channel.id === channelAdminId) {
+      return Promise.resolve(false);
+    }
     if (!channel.notify) {
       return Promise.resolve(false);
     }

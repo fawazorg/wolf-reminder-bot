@@ -2,8 +2,6 @@ keyword: reminder
 framework:
   developer: 12500068
   language: ar
-  rateLimiter:
-    enabled: true
   command:
     ignore:
       official: true
