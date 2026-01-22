@@ -6,19 +6,24 @@ import logger from './utility/logger.js';
 
 export class AdhanClient extends WOLF {
   clients;
-
   email;
 
   constructor(email, password) {
     super();
     this.email = email;
-    this.login(email, password)
-      .then(() => logger.info('try to login'))
-      .catch((e) => logger.error(`login error : ${e}`));
+    this.clients = null;
+
+    // 1. Setup Event Listeners first
     this.on('loginSuccess', async () => this.#loginSuccess());
     this.on('loginFailed', (reason) => this.#loginFailed(reason));
+
+    // 2. Register Commands
     this.#commandHandler();
-    this.clients = null;
+
+    // 3. Initiate Login
+    // We do not use .then() here because login() does not return a Promise
+    logger.info(`Attempting login for ${this.email}...`);
+    this.login(email, password);
   }
 
   #commandHandler() {
@@ -65,6 +70,7 @@ export class AdhanClient extends WOLF {
    * @returns {Promise<void>}
    */
   #loginSuccess() {
+    logger.info(`Login success for ${this.email}`);
     scheduleJob('* * * * *', async () => job(this));
     return Promise.resolve();
   }
@@ -74,7 +80,7 @@ export class AdhanClient extends WOLF {
    * @param {import('wolf.js').Response} reason
    */
   #loginFailed(reason) {
-    logger.error(`login failed: ${reason.headers?.message}, ${this.email}`);
+    logger.error(`Login failed: ${reason.headers?.message || 'Unknown reason'}, ${this.email}`);
     return Promise.resolve();
   }
 }
