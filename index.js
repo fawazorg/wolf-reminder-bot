@@ -1,6 +1,6 @@
 import 'dotenv/config.js';
-import './db.js';
 import { AdhanClient } from './adhanClient.js';
+import './db.js';
 import logger from './utility/logger.js';
 
 const clients = new Map();
