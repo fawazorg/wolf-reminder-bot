@@ -4,31 +4,30 @@ import { AdhanClient } from './adhanClient.js';
 import logger from './utility/logger.js';
 
 const clients = new Map();
-const accounts = process.env.ACCOUNTS.split('|');
+
 const main = async () => {
-  await accounts.reduce(async (previousValue, account) => {
-    await previousValue;
+  if (!process.env.ACCOUNTS) {
+    throw new Error('ACCOUNTS environment variable is undefined or empty');
+  }
 
-    const client = new AdhanClient(
-      account.split(':')[0],
-      account.split(':')[1],
-    );
+  const accounts = process.env.ACCOUNTS.split('|');
+ 
+  for (const account of accounts) {
+    const [username, password] = account.split(':');
 
-    clients.set(account.split(':')[0], client);
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500);
-    });
-  }, Promise.resolve());
+    if (!username || !password) continue;
 
-  await Array.from(clients.values()).reduce(async (previousValue, client) => {
-    await previousValue;
+    const client = new AdhanClient(username, password);
+    clients.set(username, client);
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+
+  for (const client of clients.values()) {
     client.setClients(clients);
-    await new Promise((resolve) => {
-      setTimeout(resolve, 50);
-    });
-  }, Promise.resolve());
 
-  return Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
 };
 
 main()
@@ -37,4 +36,5 @@ main()
   })
   .catch((e) => {
     logger.info(`main function error ${e}`);
+    console.error(e); 
   });
