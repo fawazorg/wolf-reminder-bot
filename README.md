@@ -24,59 +24,61 @@ Adhan is a versatile prayer times calculation bot that caters to users from all 
 ## Installation
 To install and set up Adhan bot, follow the instructions below:
 
-1. Install Docker: Ensure that you have Docker installed on your machine. You can download it from [here](https://www.docker.com/get-started).
-
-2. Clone the Repository: Clone the Wolf Adhan repository from GitHub using the following command:
-   ```
+1. **Clone the Repository**: Clone the Wolf Adhan repository from GitHub:
+   ```bash
    git clone https://github.com/fawazorg/wolf-reminder-bot.git
-   ```
-
-3. Navigate to the Project Directory: Move to the cloned project directory:
-   ```
    cd wolf-reminder-bot
    ```
 
-4. Install Dependencies: Install the necessary dependencies by running the following command:
-   ```
+2. **Install Dependencies**:
+   ```bash
    npm install
    ```
 
-5. Configure the Bot: Create a `.env` file in the project root directory and provide the required environment variables. You can use the provided `.env.example` file as a template.
-
-6. Start the Bot: Launch the bot using Docker Compose with the following command:
+3. **Configure the Bot**: Create a `.env` file in the project root directory. You can use `.env.example` as a template.
+   ```bash
+   cp .env.example .env
    ```
+   
+   **Environment Variables:**
+   - `ACCOUNTS`: List of bot accounts in format `email:password:device_id|...`
+   - `SLACK_HOOK`: Slack webhook URL for logs/notifications.
+   - `HERE_APIKEY`: API key for location services.
+   - `ROOT_USERNAME`: Admin username for database.
+   - `ROOT_PASSWORD`: Admin password for database.
+   - `ROOT_DATABASE`: Admin database name.
+   - `MONGO_USER`: MongoDB username.
+   - `MONGO_PWD`: MongoDB password.
+   - `MONGO_DB_NAME`: MongoDB database name.
+
+4. **Start the Bot**:
+   Using Docker (Recommended):
+   ```bash
    docker-compose up -d
    ```
+   Or locally:
+   ```bash
+   npm start
+   ```
 
-**Congratulations!** Wolf Adhan is now successfully installed and ready to used on the [WOLF](https://wolflive.com) app.
+**Congratulations!** Wolf Adhan is now successfully installed and ready to use on the [WOLF](https://wolflive.com) app.
 
 ## Commands
 
 - `!Adhan`: Retrieve the prayer times for the current day based on the default settings.
-
 - `!Adhan help`: Get information about available commands and how to use them.
+- `!Adhan place`: Set or view location.
+- `!Adhan remind`: Configure reminder settings.
+- `!Adhan join`: Join a channel (private command).
+- `!Adhan total`: View stats (admin).
 
 ## Contribute
 
 Contributions to the Adhan bot project are welcome! If you're interested in contributing, follow these steps:
 
 1. Fork the repository on GitHub.
-
-2. Clone your forked repository and create a new branch for your contributions:
-   ```
-   git clone https://github.com/fawazorg/wolf-reminder-bot.git
-   cd wolf-reminder-bot
-   git checkout -b feature/new-feature
-   ```
-
+2. Clone your forked repository and create a new branch: `git checkout -b feature/new-feature`
 3. Make your changes, commit them, and push to your forked repository.
+4. Create a pull request (PR).
 
-4. Create a pull request (PR) from your branch to the main project repository.
-
-5. Your PR will be reviewed by the project maintainers, and any necessary feedback will be provided.
-
-Thank you for considering contributing to the Adhan bot project! Your contributions help improve the bot and make it even more useful for users worldwide.
-
----
-
-For any issues, questions, or feedback, feel free to open an issue on the GitHub repository or contact the maintainers directly [@Fawaz](https://wolf.live/u/12500068). We appreciate your interest in Adhan bot!
+For any issues, questions, or feedback, feel free to open an issue on the GitHub repository or contact the maintainers directly [@Fawaz](https://wolf.live/u/12500068).
