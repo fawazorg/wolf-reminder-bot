@@ -99,7 +99,6 @@ const toggleRemind = async (command) => {
       [{ $set: { notify: { $not: '$notify' } } }],
       { upsert: true, returnDocument: 'after' },
     );
-
     if (channel?.notify) {
       await command.reply(command.getPhrase('remind_enabled'));
     } else {
@@ -110,4 +109,5 @@ const toggleRemind = async (command) => {
   }
 };
 
-export { getAllPrayTimes, changePlace, toggleRemind };
+export { changePlace, getAllPrayTimes, toggleRemind };
+
