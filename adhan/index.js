@@ -97,7 +97,7 @@ const toggleRemind = async (command) => {
     const channel = await Channel.findOneAndUpdate(
       { cid: command.targetChannelId },
       [{ $set: { notify: { $not: '$notify' } } }],
-      { upsert: true, returnDocument: 'after' },
+      { upsert: true, returnDocument: 'after', updatePipeline: true },
     );
     if (channel?.notify) {
       await command.reply(command.getPhrase('remind_enabled'));
