@@ -11,6 +11,7 @@ import logger from './utility/logger.js';
 export class AdhanClient extends WOLF {
   clients;
   email;
+  #cronJob = null;
 
   /**
    * Creates an instance of AdhanClient.
@@ -84,7 +85,10 @@ export class AdhanClient extends WOLF {
    */
   #loginSuccess(subscriber) {
     logger.info(`Login success for ${this.email} (${subscriber.id})`);
-    scheduleJob('* * * * *', async () => job(this));
+    if (this.#cronJob) {
+      this.#cronJob.cancel();
+    }
+    this.#cronJob = scheduleJob('* * * * *', async () => job(this));
     return Promise.resolve();
   }
 
